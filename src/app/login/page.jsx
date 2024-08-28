@@ -1,6 +1,9 @@
 "use client";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -15,7 +18,15 @@ export default function LoginPage() {
       body: JSON.stringify({ username, password }),
     });
 
-    console.log(response);
+    const { success } = await response.json();
+
+    if (success) {
+      const next = searchParams.get("next");
+      console.log({ next });
+      router.push(next ? next : "/");
+    } else {
+      alert("Invalid username or password");
+    }
   };
 
   return (

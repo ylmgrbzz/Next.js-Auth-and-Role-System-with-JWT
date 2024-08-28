@@ -16,6 +16,9 @@ export async function POST(request) {
     const response = NextResponse.json({
       success: true,
     });
+
+    response.cookies.set({ name: "token", value: jwt, path: "/" });
+
     return response;
   }
 

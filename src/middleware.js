@@ -29,11 +29,18 @@ export async function middleware(request) {
   }
 
   if (!hasVerifiedToken) {
-    const searchParams = new URLSearchParams();
+    const searchParams = new URLSearchParams(nextUrl.searchParams);
     console.log("searchParams", searchParams);
     searchParams.set("next", nextUrl.pathname);
 
-    return NextResponse.redirect(new URL("/login", url));
+    return NextResponse.redirect(
+      new URL(
+        `
+        /login?${searchParams}
+        `,
+        url
+      )
+    );
   }
   return NextResponse.next();
 }

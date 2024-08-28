@@ -1,9 +1,10 @@
-import { verifyJwtToken } from "./libs/auth";
+import { verifyJwtToken } from "@/libs/auth";
 import { NextResponse } from "next/server";
 
 export const AUTH_PAGES = ["/login", "/register"];
 
-const isAuthPages = (url) => AUTH_PAGES.some((page) => page.startsWith(url));
+export const isAuthPages = (url) =>
+  AUTH_PAGES.some((page) => page.startsWith(url));
 
 export async function middleware(request) {
   const { pathname } = new URL(request.url);

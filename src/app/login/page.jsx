@@ -3,6 +3,19 @@
 export default function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    console.log({ username });
+
+    const response = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    });
+
+    console.log(response);
   };
 
   return (

@@ -12,8 +12,8 @@ export const getJwtSecretKey = () => {
 
 export async function verifyJwtToken(token) {
   try {
-    const decoded = await jwtVerify(token, getJwtSecretKey());
-    return decoded;
+    const { payload } = await jwtVerify(token, getJwtSecretKey());
+    return payload;
   } catch (error) {
     return null;
   }

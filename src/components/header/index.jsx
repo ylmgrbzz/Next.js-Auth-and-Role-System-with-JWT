@@ -1,8 +1,10 @@
+"use client";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 
-export async function Header() {
-  console.log(await useAuth.fromServer());
+export function Header() {
+  const auth = useAuth();
+  console.log("auth", auth);
   return (
     <header>
       <div>

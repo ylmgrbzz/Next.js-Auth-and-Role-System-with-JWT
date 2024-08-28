@@ -8,7 +8,7 @@ export async function middleware(request) {
 
   console.log(token);
 
-  const hasVerifiedToken = token && verifyJwtToken(token);
+  const hasVerifiedToken = token && (await verifyJwtToken(token));
 
   console.log(hasVerifiedToken);
 }

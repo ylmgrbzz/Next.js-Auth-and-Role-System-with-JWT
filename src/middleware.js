@@ -1,6 +1,10 @@
 import { verifyJwtToken } from "./libs/auth";
 import { NextResponse } from "next/server";
 
+export const AUTH_PAGES = ["/login", "/register"];
+
+const isAuthPages = (url) => AUTH_PAGES.some((page) => page.startsWith(url));
+
 export async function middleware(request) {
   const { pathname } = new URL(request.url);
 
@@ -13,7 +17,22 @@ export async function middleware(request) {
   console.log("token", token);
   console.log("hasVerifiedToken", hasVerifiedToken);
 
+  const isAuthPageRequest = isAuthPages(nextUrl.pathname);
+
+  if (isAuthPageRequest) {
+    if (!hasVerifiedToken) {
+      const response = NextResponse.next();
+      return response;
+    }
+    const response = NextResponse.redirect(new URL("/", url));
+    return response;
+  }
+
   if (!hasVerifiedToken) {
+    const searchParams = new URLSearchParams();
+    console.log("searchParams", searchParams);
+    searchParams.set("next", nextUrl.pathname);
+
     return NextResponse.redirect(new URL("/login", url));
   }
   return NextResponse.next();

@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
 import { verifyJwtToken } from "@/libs/auth";
-import { cookies } from "next/headers";
 
 export const fromServer = async () => {
+  const cookies = require("nest/headers").cookies;
   const cookieList = cookies();
 
   console.log("cookieList", cookieList.get("token"));
@@ -13,6 +15,21 @@ export const fromServer = async () => {
   return hasVerifiedToken;
 };
 
-export function useAuth() {}
+export function useAuth() {
+  const [auth, setAuth] = useState(null);
+
+  const getVerifiedToken = async () => {
+    const cookies = new Cookies();
+    const token = cookies.get("token") ?? null;
+    const hasVerifiedToken = await verifyJwtToken(token);
+    setAuth(hasVerifiedToken);
+  };
+
+  useEffect(() => {
+    getVerifiedToken();
+  }, []);
+
+  return auth;
+}
 
 useAuth.fromServer = fromServer;
